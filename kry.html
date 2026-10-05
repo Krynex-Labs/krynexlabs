@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KrynexLabs — I'm cool</title>
+  <link rel="icon" href="https://cdn-avatars.huggingface.co/v1/production/uploads/6a721010cb505c0d10bc7987/wqfqFzlxz8mhiXTEtTdtl.jpeg">
+  <style>
+    :root {
+      --orange: #FD6A0D;
+      --dark: #100C0B;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: var(--dark);
+      color: #fff;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(253,106,13,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(253,106,13,0.07) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridMove 20s linear infinite;
+      z-index: 0;
+    }
+    @keyframes gridMove {
+      from { background-position: 0 0; }
+      to   { background-position: 40px 40px; }
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      animation: fadeUp 1s ease-out both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .company {
+      letter-spacing: 6px;
+      font-size: 14px;
+      color: var(--orange);
+      margin-bottom: 20px;
+      opacity: 0.9;
+      animation: fadeUp 1s ease-out 0.2s both;
+    }
+
+    .logo {
+      width: 130px;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid var(--orange);
+      background: var(--orange);
+      cursor: pointer;
+      user-select: none;
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 25px rgba(253,106,13,0.5); }
+      50%      { box-shadow: 0 0 55px rgba(253,106,13,0.95); }
+    }
+
+    .logo.bounce {
+      animation: pulse 2.5s ease-in-out infinite,
+                 bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes bounce {
+      0%   { transform: scale(1); }
+      30%  { transform: scale(1.25); }
+      50%  { transform: scale(0.9); }
+      70%  { transform: scale(1.1); }
+      85%  { transform: scale(0.97); }
+      100% { transform: scale(1); }
+    }
+
+    .title {
+      font-size: clamp(48px, 12vw, 140px);
+      font-weight: 900;
+      margin: 25px 0 10px;
+      color: var(--orange);
+      text-shadow: 0 0 30px rgba(253,106,13,0.45);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.15s ease;
+      animation: fadeUp 1s ease-out 0.3s both;
+    }
+    .title:active { transform: scale(0.95); }
+
+    .tagline {
+      font-size: 16px;
+      color: #bbb;
+      margin-bottom: 30px;
+      animation: fadeUp 1s ease-out 0.4s both;
+    }
+
+    .btn {
+      padding: 14px 32px;
+      font-size: 16px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: var(--dark);
+      background: var(--orange);
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: fadeUp 1s ease-out 0.5s both;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(253,106,13,0.6);
+    }
+    .btn:active { transform: translateY(0); }
+
+    .counter {
+      margin-top: 25px;
+      font-size: 13px;
+      color: #777;
+      animation: fadeUp 1s ease-out 0.6s both;
+    }
+    .counter span { color: var(--orange); font-weight: bold; }
+
+    .confetti {
+      position: fixed;
+      width: 8px;
+      height: 14px;
+      top: -20px;
+      z-index: 999;
+      pointer-events: none;
+      animation: fall linear forwards;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="content">
+    <div class="company">KRYNEXLABS</div>
+
+    <img class="logo" id="logo"
+         src="https://cdn-avatars.huggingface.co/v1/production/uploads/6a721010cb505c0d10bc7987/wqfqFzlxz8mhiXTEtTdtl.jpeg"
+         alt="KrynexLabs logo">
+
+    <div class="title" id="title">I'm cool</div>
+
+    <div class="tagline">High performance. Zero bloat. 🧡</div>
+
+    <a class="btn" id="btn"
+       href="https://huggingface.co/KrynexLabs"
+       target="_blank"
+       rel="noopener">Join the coolness</a>
+
+    <div class="counter">You've been cool for <span id="timer">0</span> seconds</div>
+  </div>
+
+  <script>
+    // Счётчик
+    let seconds = 0;
+    const timerEl = document.getElementById('timer');
+    setInterval(() => {
+      seconds++;
+      timerEl.textContent = seconds;
+    }, 1000);
+
+    // Смена фразы по клику на заголовок
+    const phrases = [
+      "I'm cool",
+      "You're cool",
+      "We're cool",
+      "KrynexLabs is cool",
+      "Stay cool 🧡"
+    ];
+    let phraseIndex = 0;
+    document.getElementById('title').addEventListener('click', () => {
+      phraseIndex = (phraseIndex + 1) % phrases.length;
+      document.getElementById('title').textContent = phrases[phraseIndex];
+      launchConfetti(20);
+    });
+
+    // Кнопка — конфетти, потом переход на HF
+    document.getElementById('btn').addEventListener('click', () => {
+      launchConfetti(50);
+    });
+
+    // Пружинка лого
+    const logo = document.getElementById('logo');
+    logo.addEventListener('click', () => {
+      logo.classList.remove('bounce');
+      void logo.offsetWidth;
+      logo.classList.add('bounce');
+      launchConfetti(15);
+    });
+    logo.addEventListener('animationend', (e) => {
+      if (e.animationName === 'bounce') logo.classList.remove('bounce');
+    });
+
+    // Конфетти
+    const colors = ['#FD6A0D', '#100C0B', '#ffa04d', '#ffffff'];
+    function launchConfetti(count) {
+      for (let i = 0; i < count; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti';
+        piece.style.left = Math.random() * 100 + 'vw';
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+        piece.style.animationDelay = (Math.random() * 0.3) + 's';
+        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        document.body.appendChild(piece);
+        setTimeout(() => piece.remove(), 3500);
+      }
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(() => launchConfetti(40), 500);
+    });
+  </script>
+</body>
+</html> 
